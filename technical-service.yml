@@ -6,27 +6,32 @@ server:
     include-binding-errors: always
 
 spring:
-  # ===============================
-  # DB
-  # ===============================
+  h2:
+    console:
+      enabled: true
+    # ===============================
+    # DB
+    # ===============================
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/technical-servicedb
-    username: root
-    password: 2001
+    url: jdbc:h2:mem:technicalDB;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    platform: h2
+    username: sa
+    password:
 
-  # ===============================
-  # JPA / HIBERNATE
-  # ===============================
+    # ===============================
+    # JPA / HIBERNATE
+    # ===============================
   jpa:
-    database: MYSQL
     show-sql: true
     hibernate:
       ddl-auto: update
-      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect        
+        show_sql: true
+        use_sql_comments: false
+        format_sql: false
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
@@ -34,7 +39,7 @@ logging:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8099/eureka/
+      defaultZone: http://registry-service:8761/eureka/
 
 management:
   endpoints:
